@@ -8,13 +8,17 @@
 #include <thread>
 #include <mutex>
 #include <memory>
+#include <vector>
+#include <fstream>
 #include "classes.h"
 
 using namespace std; // save us some typing
 
+const string filename = "spacewars_data.txt"; // this will be the name of the save file
+
 void intro() {
     // intro stuff here
-    cout << "Hi, welcome to PIRATES & NINJAS!!!" << endl << "In this game, a pirate and a ninja fight the ultimate battle to the death!" << endl;
+    cout << "Hi, welcome to SPACE WARS!!!" << endl << "In this game, a space pirate and a space ninja fight the ultimate battle to the death!" << endl;
 }
 
 int RandomRoll() { // function for retrieving a random integer between 0 and 11
@@ -36,31 +40,68 @@ void outtro(unique_ptr<PirateBase> piratebase, unique_ptr<NinjaBase> ninjabase) 
     cout << "\nTOTAL ROCKETS FIRED FROM NINJA BASE: " << ninjabase->getRocketsLaunched() << endl; // output ninjabase rockets total
 }
 
+void saveGame(string pirateName, int pirateRockets, int pirateHP, string ninjaName, int ninjaRockets, int ninjaHP) { // this will overwrite existing save file every time
+    fstream myfile; // instantiate file object
+    myfile.open(filename, ios::out); // initial write
+    if (myfile.is_open()) { // check if file is open
+        myfile << pirateName << endl << pirateRockets << endl << pirateHP << endl << ninjaName << endl << ninjaRockets << endl << ninjaHP; // output values to file
+        myfile.close(); // close file
+    }
+}
+
+bool loadGame(vector<string> &saveData) { // pass pointer to save data vector into this function
+    ifstream in(filename);
+    if (!in) { // CHECK IF FILE OBJECT IS VALID
+        cout << endl << "**********CANNOT OPEN FILE**********" << endl << endl;
+        return false;
+    }
+    string str;
+    while (getline(in, str)) { // read next line from file until end is reached
+        saveData.push_back(str); // writes line to the vector<string>
+    }
+
+    in.close(); // close file
+    return true; // return true if file was successfully read
+}
+
 int main()
 {
     intro(); // call intro method
+
+    vector<string> saveData;
+
     int choice; // declare choice, for use later
     int startingHealth = 100; // what should the starting health of each player be?
 
-    string pirateName = CharacterName("SPACE PIRATE"); // get pirate name from user
-    string ninjaName = CharacterName("SPACE NINJA"); // get ninja name from user
+    Pirate pirate(CharacterName("SPACE PIRATE"), startingHealth); // instantiate pirate object with name and starting health, using CharacterName function to retrieve character name from user
+    Ninja ninja(CharacterName("SPACE NINJA"), startingHealth); // instantiate ninja object with name and starting health, using CharacterName function to retrieve character name from user
 
-    Pirate pirate(pirateName, startingHealth); // instantiate pirate object with name and starting health
-    Ninja ninja(ninjaName, startingHealth); // instantiate ninja object with name and starting health
     unique_ptr<PirateBase> pPirateBase(new PirateBase); // instantiate PirateBase object as new pointer
     unique_ptr<NinjaBase> pNinjaBase(new NinjaBase); // instantiate NinjaBase object as new pointer
 
     for (;;) { // main loop
         int attackHP; // declare attackHP for use later
-        cout << "1. xxxxx" << endl << "2. xxxxx" << endl << "3. Display character health" << endl << "4. Reset character health to full" << endl; // display menu options
+        cout << "1. Save game" << endl << "2. Load game" << endl << "3. Display character health" << endl << "4. Reset character health to full" << endl; // display menu options
         cout << "5. Ninja attacks Pirate with random HP" << endl << "6. Pirate attacks Ninja with random HP" << endl << "8. Help" << endl << "9. EXIT" << endl; // display more menu options
         cout << "enter a choice: "; // instruct user to make a choice
         cin >> choice; // take user input
 
         switch (choice) { // use a switch
-        case 1: // 
+        case 1: // save game
+            saveGame(pirate.Name, pPirateBase->getRocketsLaunched(), pirate.getHealth(), ninja.Name, pNinjaBase->getRocketsLaunched(), ninja.getHealth()); // pass data to save function
             continue; // repeat loop from beginning
-        case 2: // 
+        case 2: // load game
+            if (loadGame(saveData)) {
+                pirate.Name = saveData[0]; // set pirate name to first array element
+                pPirateBase->setRocketsLaunched(stoi(saveData[1])); // set rockets launched to second array element, cast as an integer
+                pirate.setHealth(stoi(saveData[2])); // set health to third array element, cast as an integer
+                ninja.Name = saveData[3]; // set ninja name to fourth array element
+                pNinjaBase->setRocketsLaunched(stoi(saveData[4])); // set rockets launched to fifth array element, cast as an integer
+                ninja.setHealth(stoi(saveData[5])); // set health to sixth array element, cast as an integer
+            }
+            else {
+                cout << endl << "**********FAILED TO LOAD SAVE DATA**********";
+            }
             continue; // repeat loop from beginning
         case 3: // display character health and launch stats
             cout << "\n\nTOTAL ROCKETS FIRED FROM PIRATE BASE: " << pPirateBase->getRocketsLaunched(); // output base rockets total
@@ -84,7 +125,7 @@ int main()
             continue;
         case 6: // pirate attacks
             attackHP = RandomRoll(); // define attackHP
-            pirate.Talk(pirate.Name, "Yarrr! Cannonballs comin yer way, SCALLYWAG!!!");
+            pirate.Talk(pirate.Name, "Yarrr! Cannonballs rockets be comin yer way, SCALLYWAG!!!");
             pPirateBase->Launch(attackHP); // launch attackHP rockets from pirate base
             ninja.defend(attackHP); // subtract pirate's attack from ninja's health
             cout << endl << pirate.Name << " ATTACKS " << ninja.Name << " FOR " << attackHP << " hitpoints!" << endl << endl;
@@ -108,6 +149,9 @@ int main()
             }
             cout << endl << "BYE! THANKS FOR PLAYING!" << endl;
             break; // exit switch
+        default:
+            cout << "\n******************************\nNOT A VALID OPTION! TRY AGAIN!\n******************************\n"; // complain to user if invalid option selected, continue the loop
+            continue;
         }
         break;
     }

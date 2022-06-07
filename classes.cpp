@@ -103,6 +103,9 @@ Launchable::Launchable() { // constructor
 int Launchable::getRocketsLaunched() { // getter method
 	return rocketsLaunched;
 }
+void Launchable::setRocketsLaunched(int rockets) { // setter method
+    rocketsLaunched = rockets;
+}
 void Launchable::incrementRocketsLaunched(int newRockets) { // setter method (increments by passed integer)
 	rocketsLaunched += newRockets;
 }

@@ -41,6 +41,7 @@ private:
 public:
 	Launchable(); // constructor
 	int getRocketsLaunched(); // getter method
+    void setRocketsLaunched(int rockets); // setter method
 	void incrementRocketsLaunched(int newRockets); // setter method (increments by passed integer)
 };
 
