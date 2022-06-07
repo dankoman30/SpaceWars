@@ -35,7 +35,7 @@ public:
     void Help();
 };
 
-class Launchable {
+class Launchable { // base class
 private:
 	int rocketsLaunched;
 public:
@@ -45,12 +45,12 @@ public:
 	void incrementRocketsLaunched(int newRockets); // setter method (increments by passed integer)
 };
 
-class PirateBase : public Launchable {
+class PirateBase : public Launchable { // inherited class
 public:
     void Launch(int rocketsToLaunch);
 };
 
-class NinjaBase : public Launchable {
+class NinjaBase : public Launchable { // inherited class
 public:
     void Launch(int rocketsToLaunch);
 };

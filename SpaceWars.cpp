@@ -82,7 +82,7 @@ int main()
     for (;;) { // main loop
         int attackHP; // declare attackHP for use later
         cout << "1. Save game" << endl << "2. Load game" << endl << "3. Display character health" << endl << "4. Reset character health to full" << endl; // display menu options
-        cout << "5. Ninja attacks Pirate with random HP" << endl << "6. Pirate attacks Ninja with random HP" << endl << "8. Help" << endl << "9. EXIT" << endl; // display more menu options
+        cout << "5. Space Ninja Attacks!" << endl << "6. Space Pirate Attacks!" << endl << "8. Help" << endl << "9. EXIT" << endl; // display more menu options
         cout << "enter a choice: "; // instruct user to make a choice
         cin >> choice; // take user input
 

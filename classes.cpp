@@ -9,7 +9,6 @@
 
 void GameStructure::Help() {} // virtual empty method
 
-
 // CHARACTER STUFF
 int Character::getHealth() { // health getter method
     return Health;
@@ -33,7 +32,6 @@ void Character::Talk(string name, string stuffToSay) { // another method for cha
 }
 void Character::Help() {} // overriding help method
 
-
 // NINJA STUFF:
 Ninja::Ninja(string N, int H) { // constructor
     Name = N; // define name
@@ -46,7 +44,6 @@ void Ninja::defend(int hitPoints) {
 void Ninja::Help() {
     cout << endl << "Ninjas are quiet and swift; you can use them to launch rockets filled with shooting stars!" << endl << endl;
 }
-
 
 // PIRATE STUFF:
 Pirate::Pirate(string N, int H) { // constructor
@@ -61,8 +58,6 @@ void Pirate::defend(int hitPoints) {
 void Pirate::Help() {
     cout << endl << "Pirates are loud and forceful; you can use them to shoot cannonballs!" << endl << endl;
 }
-
-
 
 mutex locker; // instantiate mutex object
 void launch(string origin, int rocketsToLaunch) {
@@ -91,10 +86,6 @@ void launch(string origin, int rocketsToLaunch) {
     }
     locker.unlock(); // unlock the mutex
 }
-
-
-
-
 
 // BASE STUFF:
 Launchable::Launchable() { // constructor
