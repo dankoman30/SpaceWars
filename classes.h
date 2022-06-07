@@ -34,3 +34,22 @@ public:
     void defend(int hitPoints); // override virtual method in superclass
     void Help();
 };
+
+class Launchable {
+private:
+	int rocketsLaunched;
+public:
+	Launchable(); // constructor
+	int getRocketsLaunched(); // getter method
+	void incrementRocketsLaunched(int newRockets); // setter method (increments by passed integer)
+};
+
+class PirateBase : public Launchable {
+public:
+    void Launch(int rocketsToLaunch);
+};
+
+class NinjaBase : public Launchable {
+public:
+    void Launch(int rocketsToLaunch);
+};

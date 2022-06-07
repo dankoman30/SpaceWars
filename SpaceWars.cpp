@@ -31,6 +31,11 @@ string CharacterName(string charType) { // method for retrieving string from use
     return enteredName;
 }
 
+void outtro(unique_ptr<PirateBase> piratebase, unique_ptr<NinjaBase> ninjabase) { // outtro function to display totals at end of game
+    cout << "\n\nTOTAL ROCKETS FIRED FROM PIRATE BASE: " << piratebase->getRocketsLaunched(); // output piratebase rockets total
+    cout << "\nTOTAL ROCKETS FIRED FROM NINJA BASE: " << ninjabase->getRocketsLaunched() << endl; // output ninjabase rockets total
+}
+
 int main()
 {
     intro(); // call intro method
@@ -42,6 +47,8 @@ int main()
 
     Pirate pirate(pirateName, startingHealth); // instantiate pirate object with name and starting health
     Ninja ninja(ninjaName, startingHealth); // instantiate ninja object with name and starting health
+    unique_ptr<PirateBase> pPirateBase(new PirateBase); // instantiate PirateBase object as new pointer
+    unique_ptr<NinjaBase> pNinjaBase(new NinjaBase); // instantiate NinjaBase object as new pointer
 
     for (;;) { // main loop
         int attackHP; // declare attackHP for use later
@@ -51,11 +58,13 @@ int main()
         cin >> choice; // take user input
 
         switch (choice) { // use a switch
-        case 1: // ninja attacks
+        case 1: // 
             continue; // repeat loop from beginning
-        case 2: // pirate attacks
+        case 2: // 
             continue; // repeat loop from beginning
-        case 3: // display character health
+        case 3: // display character health and launch stats
+            cout << "\n\nTOTAL ROCKETS FIRED FROM PIRATE BASE: " << pPirateBase->getRocketsLaunched(); // output base rockets total
+            cout << "\nTOTAL ROCKETS FIRED FROM NINJA BASE: " << pNinjaBase->getRocketsLaunched() << endl; // output pad rockets total
             cout << endl << "CURRENT HEALTH:" << endl << "===============" << endl; // display health
             cout << pirate.Name << ": " << pirate.getHealth() << endl;
             cout << ninja.Name << ": " << ninja.getHealth() << endl;
@@ -66,16 +75,18 @@ int main()
             ninja.setHealth(100);
             cout << "FULL HEALTH FOR ALL!" << endl << endl;
             continue;
-        case 5: // ninja attacks pirate random
+        case 5: // ninja attacks
             attackHP = RandomRoll(); // define attackHP
-            pirate.defend(attackHP); // subtract ninja's attack from pirate's health
             ninja.Talk(ninja.Name, "Eat my rockets full of ninja stars, PIRATE SWINE!!!");
+            pNinjaBase->Launch(attackHP); // launch attackHP rockets from ninja base
+            pirate.defend(attackHP); // subtract ninja's attack from pirate's health
             cout << endl << ninja.Name << " ATTACKS " << pirate.Name << " FOR " << attackHP << " hitpoints!" << endl << endl;
             continue;
-        case 6: // pirate attacks ninja random
+        case 6: // pirate attacks
             attackHP = RandomRoll(); // define attackHP
-            ninja.defend(attackHP); // subtract pirate's attack from ninja's health
             pirate.Talk(pirate.Name, "Yarrr! Cannonballs comin yer way, SCALLYWAG!!!");
+            pPirateBase->Launch(attackHP); // launch attackHP rockets from pirate base
+            ninja.defend(attackHP); // subtract pirate's attack from ninja's health
             cout << endl << pirate.Name << " ATTACKS " << ninja.Name << " FOR " << attackHP << " hitpoints!" << endl << endl;
             continue;
         case 8: // help
@@ -83,6 +94,8 @@ int main()
             ninja.Help();
             continue;
         case 9: // end game sequence
+            cout << endl << endl;
+            outtro(move(pPirateBase), move(pNinjaBase)); // pass pointers to outtro function
             cout << endl << endl;
             if (pirate.getHealth() > ninja.getHealth()) { // pirate wins
                 cout << pirate.Name << " the pirate has won the game!";
