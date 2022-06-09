@@ -30,8 +30,19 @@ int RandomRoll() { // function for retrieving a random integer between 0 and 11
 
 string CharacterName(string charType) { // method for retrieving string from user for character name
     string enteredName;
-    cout << endl << "enter a name for player:" << charType << endl;
-    cin >> enteredName; // get text from user
+    while (enteredName.length() == 0) { // keep looping until we have a valid entry
+        cout << endl << "enter a name for player: " << charType << endl;
+        try {
+            getline(cin, enteredName);
+            if (enteredName == "\n") { // check for blank entry
+                throw("*****NOTHING ENTERED*****"); // nothing entered
+            }
+        }
+        catch (string myExc) {
+            cout << endl << myExc << endl << endl << "PLEASE TRY AGAIN!!!\n\n"; // complain to user
+        }
+    }
+
     return enteredName;
 }
 
