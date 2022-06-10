@@ -57,6 +57,7 @@ void saveGame(string pirateName, int pirateRockets, int pirateHP, string ninjaNa
     if (myfile.is_open()) { // check if file is open
         myfile << pirateName << endl << pirateRockets << endl << pirateHP << endl << ninjaName << endl << ninjaRockets << endl << ninjaHP; // output values to file
         myfile.close(); // close file
+        cout << endl << endl << "*****GAME HAS BEEN SUCCESSFULLY SAVED TO " << filename << " IN SOURCE DIRECTORY!!!*****" << endl << endl; // notify user of game save
     }
 }
 
@@ -109,6 +110,7 @@ int main()
                 ninja.Name = saveData[3]; // set ninja name to fourth array element
                 pNinjaBase->setRocketsLaunched(stoi(saveData[4])); // set rockets launched to fifth array element, cast as an integer
                 ninja.setHealth(stoi(saveData[5])); // set health to sixth array element, cast as an integer
+                cout << endl << endl << "*****GAME HAS BEEN SUCCESSFULLY LOADED FROM " << filename << "!!!*****" << endl << endl; // notify user of game load
             }
             else {
                 cout << endl << "**********FAILED TO LOAD SAVE DATA**********";
